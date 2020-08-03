@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.0.0">
@@ -22,16 +22,16 @@
     var CONFIG = {"hostname":"jerilyt.github.io","root":"/yantongtt.github.io/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="如何根据互联网员工年龄基于 Markov 过程预测未来公司人员规模其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。 从Markov Chain到模型构建这个模型我是基">
+  <meta name="description" content="如何根据互联网员工年龄 基于 Markov 过程预测未来公司人员规模 其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。 &lt; !--more--&gt; 从Mar">
 <meta property="og:type" content="article">
 <meta property="og:title" content="A Markov Chain Model in Manpower Systems">
 <meta property="og:url" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/04/A-Markov-Chain-Model-in-Manpower-Systems/index.html">
 <meta property="og:site_name" content="Yantong&#39;s Blog">
-<meta property="og:description" content="如何根据互联网员工年龄基于 Markov 过程预测未来公司人员规模其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。 从Markov Chain到模型构建这个模型我是基">
+<meta property="og:description" content="如何根据互联网员工年龄 基于 Markov 过程预测未来公司人员规模 其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。 &lt; !--more--&gt; 从Mar">
 <meta property="og:locale">
 <meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/04/A-Markov-Chain-Model-in-Manpower-Systems/hypotheses.png">
 <meta property="article:published_time" content="2020-08-03T16:22:09.000Z">
-<meta property="article:modified_time" content="2020-08-03T16:34:46.856Z">
+<meta property="article:modified_time" content="2020-08-03T17:10:34.002Z">
 <meta property="article:author" content="Yantong Li">
 <meta property="article:tag" content="人力资源">
 <meta property="article:tag" content="Markov Chain">
@@ -80,12 +80,12 @@
   .use-motion .logo-line-before i { left: initial; }
   .use-motion .logo-line-after i { right: initial; }
   </style>
-</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</noscript>
 
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+  <div class="container use-motion">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -190,7 +190,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-04 00:22:09 / Modified: 00:34:46" itemprop="dateCreated datePublished" datetime="2020-08-04T00:22:09+08:00">2020-08-04</time>
+              <time title="Created: 2020-08-04 00:22:09 / Modified: 01:10:34" itemprop="dateCreated datePublished" datetime="2020-08-04T00:22:09+08:00">2020-08-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -213,15 +213,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="如何根据互联网员工年龄"><a href="#如何根据互联网员工年龄" class="headerlink" title="如何根据互联网员工年龄"></a>如何根据互联网员工年龄</h1><h2 id="基于-Markov-过程预测未来公司人员规模"><a href="#基于-Markov-过程预测未来公司人员规模" class="headerlink" title="基于 Markov 过程预测未来公司人员规模"></a>基于 Markov 过程预测未来公司人员规模</h2><p>其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。</p>
-<h3 id="从Markov-Chain到模型构建"><a href="#从Markov-Chain到模型构建" class="headerlink" title="从Markov Chain到模型构建"></a>从Markov Chain到模型构建</h3><p>这个模型我是基于Markov Chain 的思想来构建的。何为Markov Chain？简单来说就是假设某一时刻状态转移的概率只依赖于它的前一个状态。</p>
+        <h1 id="如何根据互联网员工年龄">如何根据互联网员工年龄</h1>
+<h2 id="基于-markov-过程预测未来公司人员规模">基于 Markov 过程预测未来公司人员规模</h2>
+<p>其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。 &lt; !--more--&gt;</p>
+<h3 id="从markov-chain到模型构建">从Markov Chain到模型构建</h3>
+<p>这个模型我是基于Markov Chain 的思想来构建的。何为Markov Chain？简单来说就是假设某一时刻状态转移的概率只依赖于它的前一个状态。</p>
 <p>在年龄预测模型中，基本的几个状态为不同的年龄段。Markov Chain 模型主要是分析一个人在某一阶段内由一个年龄段调到另一个年龄段的可能性。从一个年龄段转移到另一个年龄段的状态属于内部流动，意味着该员工仍在该企业就职。但还存在外部流动的状态，离职与退休。属于员工流失。通过运用Markov 过程原理，分析每个年龄段的员工流动到不同状态的流动趋势和概率，构建完整的预测周期运算过程，以便为人力资源在新增人员对企业总量规模、人员年龄结构的规划中提供依据。</p>
 <p>这么说不太直观，举个例子。在项目中，我将内部流动分为7个阶段，分别为20-24，25-28，29-31，32-35，36-40，41-50，51-60。外部流动为离职率和退休率。</p>
 <p>根据Markov Chain原理，转移矩阵中的概率就是某一状态到另一状态的可能性。下表就是项目中转移矩阵的结构。我们就用这个转移矩阵就表示这一年内发生的事情。其中，p_23表示今年处于[25,28]这一年龄阶段的员工在下一年流向[29,31]的概率。为了方便计算，我用频率表示，即今年处于[25,28]这一年龄阶段而在下一年流向[29,31]的员工总数与今年处于[25,28]这一年龄阶段的员工总数比值。为什么大部分概率为0其实很好理解，这些概率为0的状态转移情况是不可能发生的。今年[25,28]年龄段的员工明年可能是26,27,28,29，因此在内部流动中只能有两种状态。而先前说的p_23为今年28岁的员工明年没有离职流向[29,31]年龄的概率。</p>
 <p><strong>Transition Matrix from Preview Year to Next Year</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th></th>
 <th>20-24</th>
 <th>25-28</th>
@@ -235,7 +238,8 @@
 <th>Recruitment</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>20-24</td>
 <td>p_11</td>
 <td>p_12</td>
@@ -248,7 +252,7 @@
 <td>0</td>
 <td>p_1_10</td>
 </tr>
-<tr>
+<tr class="even">
 <td>25-28</td>
 <td>0</td>
 <td>p_22</td>
@@ -261,7 +265,7 @@
 <td>0</td>
 <td>p_2_10</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>29-31</td>
 <td>0</td>
 <td>0</td>
@@ -274,7 +278,7 @@
 <td>0</td>
 <td>p_3_10</td>
 </tr>
-<tr>
+<tr class="even">
 <td>32-35</td>
 <td>0</td>
 <td>0</td>
@@ -287,7 +291,7 @@
 <td>0</td>
 <td>p_4_10</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>36-40</td>
 <td>0</td>
 <td>0</td>
@@ -300,7 +304,7 @@
 <td>0</td>
 <td>p_5_10</td>
 </tr>
-<tr>
+<tr class="even">
 <td>41-50</td>
 <td>0</td>
 <td>0</td>
@@ -313,7 +317,7 @@
 <td>0</td>
 <td>p_6_10</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>51-60</td>
 <td>0</td>
 <td>0</td>
@@ -326,17 +330,21 @@
 <td>p_79</td>
 <td>p_7_10</td>
 </tr>
-</tbody></table>
-<h3 id="模型假设与定义"><a href="#模型假设与定义" class="headerlink" title="模型假设与定义"></a>模型假设与定义</h3><p><img src="hypotheses.png" alt="images"></p>
+</tbody>
+</table>
+<h3 id="模型假设与定义">模型假设与定义</h3>
+<figure>
+<img src="hypotheses.png" alt="images" /><figcaption>images</figcaption>
+</figure>
 <p>假设，</p>
 <ul>
-<li>$N(t)$ 为第t年年初各年龄段员工总数，$N(t) = [n_1(t), n_2(t), … , n_7(t)]$，其中$n_1(t),n_2(t),…,n_7(t)$ 分别为第t年20-24岁，25-28岁，29-31岁，32-35岁，36-40岁，41-50岁，51-60岁的员工人数。</li>
-<li>$L(t)$ 为在第t整年各年龄段离职员工人数，$L(t) = [l_1(t), l_2(t), … , l_7(t)]$，而$P(t) = [p_1(t), p_2(t), … , p_7(t)]$分别为发生概率，即$L(t)=N(t)\times P(t)$</li>
-<li>$R_t(t)$ 为在第t整年各年龄段退休员工人数，$R_t(t)=[0,0,0,0,0,0,r_7(t)]$ </li>
-<li>$R_c(t)$ 为在第t整年各年龄段新增员工人数</li>
-<li>$P_{ij}(t+1)$ 第t年从状态$i$到下一年转移到状态$j$的概率</li>
+<li><span class="math inline">\(N(t)\)</span> 为第t年年初各年龄段员工总数，<span class="math inline">\(N(t) = [n_1(t), n_2(t), ... , n_7(t)]\)</span>，其中<span class="math inline">\(n_1(t),n_2(t),...,n_7(t)\)</span> 分别为第t年20-24岁，25-28岁，29-31岁，32-35岁，36-40岁，41-50岁，51-60岁的员工人数。</li>
+<li><span class="math inline">\(L(t)\)</span> 为在第t整年各年龄段离职员工人数，<span class="math inline">\(L(t) = [l_1(t), l_2(t), ... , l_7(t)]\)</span>，而<span class="math inline">\(P(t) = [p_1(t), p_2(t), ... , p_7(t)]\)</span>分别为发生概率，即<span class="math inline">\(L(t)=N(t)\times P(t)\)</span></li>
+<li><span class="math inline">\(R_t(t)\)</span> 为在第t整年各年龄段退休员工人数，<span class="math inline">\(R_t(t)=[0,0,0,0,0,0,r_7(t)]\)</span></li>
+<li><span class="math inline">\(R_c(t)\)</span> 为在第t整年各年龄段新增员工人数</li>
+<li><span class="math inline">\(P_{ij}(t+1)\)</span> 第t年从状态<span class="math inline">\(i\)</span>到下一年转移到状态<span class="math inline">\(j\)</span>的概率</li>
 </ul>
-<p><strong>模型假设</strong> : 下一年年初的员工总数=这一年年末剩余+下一年年初新增。而这一年年末剩余就等于这一年年初的总数乘上转移矩阵。这就是markov process在这个算法中的运用。$$N(t+1)=N(t)*P_{ij}(t+1)+R_c(t+1)$$</p>
+<p><strong>模型假设</strong> : 下一年年初的员工总数=这一年年末剩余+下一年年初新增。而这一年年末剩余就等于这一年年初的总数乘上转移矩阵。这就是markov process在这个算法中的运用。<span class="math display">\[N(t+1)=N(t)*P_{ij}(t+1)+R_c(t+1)\]</span></p>
 
     </div>
 
@@ -418,7 +426,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E4%BA%92%E8%81%94%E7%BD%91%E5%91%98%E5%B7%A5%E5%B9%B4%E9%BE%84"><span class="nav-number">1.</span> <span class="nav-text">如何根据互联网员工年龄</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Markov-%E8%BF%87%E7%A8%8B%E9%A2%84%E6%B5%8B%E6%9C%AA%E6%9D%A5%E5%85%AC%E5%8F%B8%E4%BA%BA%E5%91%98%E8%A7%84%E6%A8%A1"><span class="nav-number">1.1.</span> <span class="nav-text">基于 Markov 过程预测未来公司人员规模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8EMarkov-Chain%E5%88%B0%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA"><span class="nav-number">1.1.1.</span> <span class="nav-text">从Markov Chain到模型构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%81%87%E8%AE%BE%E4%B8%8E%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">模型假设与定义</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E4%BA%92%E8%81%94%E7%BD%91%E5%91%98%E5%B7%A5%E5%B9%B4%E9%BE%84"><span class="nav-number">1.</span> <span class="nav-text">如何根据互联网员工年龄</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-markov-%E8%BF%87%E7%A8%8B%E9%A2%84%E6%B5%8B%E6%9C%AA%E6%9D%A5%E5%85%AC%E5%8F%B8%E4%BA%BA%E5%91%98%E8%A7%84%E6%A8%A1"><span class="nav-number">1.1.</span> <span class="nav-text">基于 Markov 过程预测未来公司人员规模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8Emarkov-chain%E5%88%B0%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA"><span class="nav-number">1.1.1.</span> <span class="nav-text">从Markov Chain到模型构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%81%87%E8%AE%BE%E4%B8%8E%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">模型假设与定义</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -511,7 +519,7 @@
 
 
   <script defer src="/yantongtt.github.io/lib/three/three.min.js"></script>
-    <script defer src="/yantongtt.github.io/lib/three/canvas_lines.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script defer src="/yantongtt.github.io/lib/three/canvas_lines.min.js"></script>
 
 
   
@@ -533,6 +541,59 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
