@@ -222,6 +222,7 @@
 <p>Data cleaning is the process of cleaning or standardising the data to make it ready for analysis. Most of times, we deal with discrepancies such as incorrect data formats, missing data, errors. It is irrational to delete data with missing values because they may reveal some information. Besides the type errors, there are still many reasons to make it. The Airbnb dataset is . It’s an interesting challenge. In this blog, I will illustrate how I cope with them.</p>
 <h2 id="Handling-missing-values"><a href="#Handling-missing-values" class="headerlink" title="Handling missing values"></a>Handling missing values</h2><p>See how many missing data points we have</p>
 <p>In the raw dataset, there are too many missing values in the form of entire rows with all NA value. We just delete them because there is no meaning. After we delete 1131 NA rows, let’s see how many we have in each column.</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -230,7 +231,8 @@
 <th>How it looks like</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>square_feet</td>
 <td>2695</td>
 <td>NA 720 NA NA NA NA NA NA NA 1012</td>
@@ -283,7 +285,7 @@
 <tr>
 <td>house_rules</td>
 <td>1313</td>
-<td>“_ keine laute Musik _ bitte nicht mit…” ,NA</td>
+<td>“<em> keine laute Musik </em> bitte nicht mit…” ,NA</td>
 </tr>
 <tr>
 <td>host_about</td>
@@ -645,7 +647,9 @@
 <td>0</td>
 <td>1  2    3  4  5    6  7  8    9  10  11   12  16</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p> That seems like a lot! For almost cells in this dataset are empty. In the next step, we are going to take a closer look at some of the columns with missing values and try to fighure out what might be going on with them,</p>
 <h3 id="Figure-out-why-the-data-is-missing"><a href="#Figure-out-why-the-data-is-missing" class="headerlink" title="Figure out why the data is missing"></a>Figure out why the data is missing</h3><p>This is the point at which we get into the part of data science that I like to call “data intution”, by which I mean “really looking at your data and trying to figure out why it is the way it is and how that will affect your analysis”. It can be a frustrating part of data science, especially if you’re newer to the field and don’t have a lot of experience. For dealing with missing values, you’ll need to use your intution to figure out why the value is missing. One of the most important question you can ask yourself to help figure this out is this:</p>
 <p>Before we impute the missing value, it is a critical point to get into this part. This helps us to get “data intuition” by really looking at your dataset and trying to figure out why it is this way and how that will affect your analysis. Keep the feature or not is a really important question for analysis, and you can ask yourself <strong>“Is this value missing becuase it wasn’t recorded or becuase it dosen’t exist?”</strong> </p>
@@ -662,7 +666,6 @@
 </ul>
 <p>license is a feature discribe the host’s license. If host has that, they should upload the exact license code here. Acturally, we don’t care about the exact text information on that. Whether has license or not is more meaningful for us. Therefore, I transform the license code as “T”, and missing value as “F”. “T” is the abbreviation of “true”, representing the host has license code for the accomendation. While “F” is “false”, which means they do have license code. </p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PB_3$license[which(is.na(PB_3$license)==<span class="literal">F</span>)] = <span class="string">&quot;Yes&quot;</span></span><br><span class="line">PB_3$license[which(is.na(PB_3$license)==<span class="literal">T</span>)] = <span class="string">&quot;No&quot;</span></span><br></pre></td></tr></table></figure>
-
 <p>The dataset still has some variables which can handle in the same method.</p>
 <ul>
 <li>Date to Time </li>
@@ -671,21 +674,16 @@
 <p>Here, I created a new feature Business_interval, which measures number of day after this airbnb has first review. Also, same method works on other date variables, like last_review, host_since. I created a feature named No_Business_interval. This measures number of day after the last review. Longer interval means this airbnb is no business recently. And the third feature is operation_interval, which is number of day after host_since. This measure how long that the airbnb is. </p>
 <p>There are missing value in first_review and last_review the two variables. The reason would be there is no review. Therefore, the time interval would be 0.</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">first_review = as.Date(PB_2$first_review,<span class="string">&quot;%Y-%m-%d&quot;</span>)</span><br><span class="line">last_review = as.Date(PB_2$last_review,<span class="string">&quot;%Y-%m-%d&quot;</span>)</span><br><span class="line">host_since = as.Date(PB_2$host_since,<span class="string">&quot;%Y-%m-%d&quot;</span>)</span><br><span class="line">Business_interval = today() - first_review</span><br><span class="line">No_Business_interval = today() - last_review</span><br><span class="line">operation_interval = today() - host_since</span><br><span class="line"></span><br><span class="line">Business_interval[is.na(Business_interval) == <span class="literal">T</span>] = <span class="number">0</span></span><br><span class="line">No_Business_interval[is.na(No_Business_interval) == <span class="literal">T</span>] = <span class="number">0</span> </span><br><span class="line">operation_interval[is.na(operation_interval) == <span class="literal">T</span>] = <span class="number">0</span> </span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>Binning into category</li>
 </ul>
 <p>In my oppinion, missing is also information on that feature. I dont like delete or impute them directly. Sometimes, I’d like to keep them, making a new value for them. That is, I will create a new level named, “N/A” for the missing value. However, problems come out. If we use “N/A” to present the missing value, then the variable will be categorical feature. It is okay for the features with a small amount of values like gender. After created new level, gender can be “female”, “male”, “don’t know”. But for numeric variables like host_response_rate, value is numeric ranging from 0 to 100%. In this case, I created new level as “N/A” (not available), and binned the rate into two group, high rate(host_response_rate &gt;= 80%) and low rate(host_response_rate &lt; 80%). The information will be reducted but it is more effeciently for analysis and do not influence the analysis a lot. </p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># transform missing value to &quot;N/A&quot;(not available). create a level for null value</span></span><br><span class="line">PB_3$host_response_time[is.na(PB_3$host_response_time)] &lt;- <span class="string">&quot;N/A&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># host_response_rate &#123;high: host_response_rate &gt;= 80%&#125;, &#123;low: host_response_rate &lt; 80%&#125;, &#123;N/A: not available&#125;</span></span><br><span class="line">PB_3$host_response_rate &lt;- as.numeric(sub(<span class="string">&quot;%&quot;</span>,<span class="string">&quot;&quot;</span>,PB_3$host_response_rate))/<span class="number">100</span></span><br><span class="line">summary(as.factor(PB_3$host_response_rate))</span><br><span class="line">PB_3$host_response_rate[PB_3$host_response_rate&gt;= <span class="number">0.8</span>] &lt;- <span class="string">&quot;high&quot;</span></span><br><span class="line">PB_3$host_response_rate[PB_3$host_response_rate&lt; <span class="number">0.8</span>] &lt;- <span class="string">&quot;low&quot;</span></span><br><span class="line">PB_3$host_response_rate[is.na(PB_3$host_response_rate)] &lt;- <span class="string">&quot;N/A&quot;</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>Other feature engineering</li>
 </ul>
 <p>As I mention above, we can use monthly_price and weekly_price to create new features about the discount that host offered. In this step, we can not use the exact number from weekly_price and monthly_price. Because the two prices are calculated after we decide the daily price. That is, it will be higher when daily price is high. However, we can measure whether the airbnb provide the discount or not. If providing, we use the value as “offer discount”, and if not, the value will be “no discount”.</p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1</span>:length(PB_lm$weekly_price)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (is.na(PB_lm$weekly_price[i]) == <span class="literal">T</span>)&#123;</span><br><span class="line">                PB_lm$weekly_price[i] = PB_lm$price[i]*<span class="number">7</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">weekly_discount_ratio = (PB_lm$weekly_price)/(PB_lm$price*<span class="number">7</span>)</span><br><span class="line">weekly_discount_ratio[is.na(weekly_discount_ratio) == <span class="literal">T</span>] = <span class="number">1</span></span><br><span class="line"><span class="comment">#summary(weekly_discount_ratio)</span></span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1</span>:length(weekly_discount_ratio))&#123;</span><br><span class="line">        <span class="keyword">if</span> (weekly_discount_ratio[i] &lt; <span class="number">1</span> )&#123;</span><br><span class="line">                PB_lm$weekly_price[i] = <span class="string">&quot;offer discount&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">                PB_lm$weekly_price[i] = <span class="string">&quot;no discount&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">PB_lm$weekly_price = as.factor(PB_lm$weekly_price)</span><br><span class="line"><span class="comment">#summary(PB_lm$weekly_price)</span></span><br></pre></td></tr></table></figure>
-
-
-
 </li>
 </ul>
 <ul>
@@ -759,7 +757,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+          <h1 id=""><a href="#" class="headerlink" title=" "></a> </h1>
       
     </div>
 
@@ -826,12 +824,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="如何根据互联网员工年龄"><a href="#如何根据互联网员工年龄" class="headerlink" title="如何根据互联网员工年龄"></a>如何根据互联网员工年龄</h1><h2 id="基于-Markov-过程预测未来公司人员规模"><a href="#基于-Markov-过程预测未来公司人员规模" class="headerlink" title="基于 Markov 过程预测未来公司人员规模"></a>基于 Markov 过程预测未来公司人员规模</h2><p>其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。<br>&lt; !–more–&gt;</p>
+          <h1 id="如何根据互联网员工年龄"><a href="#如何根据互联网员工年龄" class="headerlink" title="如何根据互联网员工年龄"></a>如何根据互联网员工年龄</h1><h2 id="基于-Markov-过程预测未来公司人员规模"><a href="#基于-Markov-过程预测未来公司人员规模" class="headerlink" title="基于 Markov 过程预测未来公司人员规模"></a>基于 Markov 过程预测未来公司人员规模</h2><p>其实不管是互联网、金融还是其他行业，拟定一个合理员工年龄结构战略对任何一家企业的长期发展都有着极其重要的影响，同时也是人力规划的核心目标。在制定未来一段时期人员补充方案时，企业有必要对不同方案下的员工年龄结构变化趋势进行预测，从而判断不同方案下员工队伍的变化是否能支撑未来发展需要。<br>&lt; !—more—&gt;</p>
 <h3 id="从Markov-Chain到模型构建"><a href="#从Markov-Chain到模型构建" class="headerlink" title="从Markov Chain到模型构建"></a>从Markov Chain到模型构建</h3><p>这个模型我是基于Markov Chain 的思想来构建的。何为Markov Chain？简单来说就是假设某一时刻状态转移的概率只依赖于它的前一个状态。</p>
 <p>在年龄预测模型中，基本的几个状态为不同的年龄段。Markov Chain 模型主要是分析一个人在某一阶段内由一个年龄段调到另一个年龄段的可能性。从一个年龄段转移到另一个年龄段的状态属于内部流动，意味着该员工仍在该企业就职。但还存在外部流动的状态，离职与退休。属于员工流失。通过运用Markov 过程原理，分析每个年龄段的员工流动到不同状态的流动趋势和概率，构建完整的预测周期运算过程，以便为人力资源在新增人员对企业总量规模、人员年龄结构的规划中提供依据。</p>
 <p>这么说不太直观，举个例子。在项目中，我将内部流动分为7个阶段，分别为20-24，25-28，29-31，32-35，36-40，41-50，51-60。外部流动为离职率和退休率。</p>
 <p>根据Markov Chain原理，转移矩阵中的概率就是某一状态到另一状态的可能性。下表就是项目中转移矩阵的结构。我们就用这个转移矩阵就表示这一年内发生的事情。其中，p_23表示今年处于[25,28]这一年龄阶段的员工在下一年流向[29,31]的概率。为了方便计算，我用频率表示，即今年处于[25,28]这一年龄阶段而在下一年流向[29,31]的员工总数与今年处于[25,28]这一年龄阶段的员工总数比值。为什么大部分概率为0其实很好理解，这些概率为0的状态转移情况是不可能发生的。今年[25,28]年龄段的员工明年可能是26,27,28,29，因此在内部流动中只能有两种状态。而先前说的p_23为今年28岁的员工明年没有离职流向[29,31]年龄的概率。</p>
 <p><strong>Transition Matrix from Preview Year to Next Year</strong></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -848,7 +847,8 @@
 <th>Recruitment</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>20-24</td>
 <td>p_11</td>
 <td>p_12</td>
@@ -939,7 +939,9 @@
 <td>p_79</td>
 <td>p_7_10</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="模型假设与定义"><a href="#模型假设与定义" class="headerlink" title="模型假设与定义"></a>模型假设与定义</h3><p><img src="hypotheses.png" alt="images"></p>
 <p>假设，</p>
 <ul>
@@ -949,7 +951,7 @@
 <li>$R_c(t)$ 为在第t整年各年龄段新增员工人数</li>
 <li>$P_{ij}(t+1)$ 第t年从状态$i$到下一年转移到状态$j$的概率</li>
 </ul>
-<p><strong>模型假设</strong> : 下一年年初的员工总数=这一年年末剩余+下一年年初新增。而这一年年末剩余就等于这一年年初的总数乘上转移矩阵。这就是markov process在这个算法中的运用。$$N(t+1)=N(t)*P_{ij}(t+1)+R_c(t+1)$$</p>
+<p><strong>模型假设</strong> : 下一年年初的员工总数=这一年年末剩余+下一年年初新增。而这一年年末剩余就等于这一年年初的总数乘上转移矩阵。这就是markov process在这个算法中的运用。<script type="math/tex">N(t+1)=N(t)*P_{ij}(t+1)+R_c(t+1)</script></p>
 
       
     </div>
@@ -1068,16 +1070,12 @@
       
           <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
 <h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
       
@@ -1257,6 +1255,8 @@
 
 
 
+
+  
 
   
 
