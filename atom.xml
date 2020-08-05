@@ -6,7 +6,7 @@
   <link href="/yantongtt.github.io/atom.xml" rel="self"/>
   
   <link href="https://jerilyt.github.io/yantongtt.github.io/"/>
-  <updated>2020-08-05T14:52:22.299Z</updated>
+  <updated>2020-08-05T16:12:13.733Z</updated>
   <id>https://jerilyt.github.io/yantongtt.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Exploring Machine Learning for Airbnb Listings in Germany - Price Prediction</title>
+    <link href="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-price-prediction/"/>
+    <id>https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-price-prediction/</id>
+    <published>2020-08-05T16:10:44.000Z</published>
+    <updated>2020-08-05T16:12:13.733Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+      <category term="Machine Learning" scheme="https://jerilyt.github.io/yantongtt.github.io/categories/Machine-Learning/"/>
+    
+    
+      <category term="Airbnb Listings" scheme="https://jerilyt.github.io/yantongtt.github.io/tags/Airbnb-Listings/"/>
+    
+      <category term="Regression" scheme="https://jerilyt.github.io/yantongtt.github.io/tags/Regression/"/>
+    
+  </entry>
   
   <entry>
     <title>Exploring for Airbnb Dataset in Germany - Data Cleaning Challenge</title>
@@ -96,51 +117,6 @@
       <category term="人力资源" scheme="https://jerilyt.github.io/yantongtt.github.io/tags/%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90/"/>
     
       <category term="Markov Chain" scheme="https://jerilyt.github.io/yantongtt.github.io/tags/Markov-Chain/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>test</title>
-    <link href="https://jerilyt.github.io/yantongtt.github.io/2020/08/03/test/"/>
-    <id>https://jerilyt.github.io/yantongtt.github.io/2020/08/03/test/</id>
-    <published>2020-08-03T04:53:30.000Z</published>
-    <updated>2020-08-03T04:54:22.817Z</updated>
-    
-    <content type="html"><![CDATA[<p>Just for testing</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Just for testing&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://jerilyt.github.io/yantongtt.github.io/2020/08/03/hello-world/"/>
-    <id>https://jerilyt.github.io/yantongtt.github.io/2020/08/03/hello-world/</id>
-    <published>2020-08-03T04:29:15.733Z</published>
-    <updated>2020-08-03T04:29:15.733Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for
-      
-    
-    </summary>
-    
-    
     
   </entry>
   
