@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-08-05 19:33:11" itemprop="dateModified" datetime="2020-08-05T19:33:11+08:00">2020-08-05</time>
+                <time title="Modified: 2020-08-05 19:41:39" itemprop="dateModified" datetime="2020-08-05T19:41:39+08:00">2020-08-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -215,7 +215,8 @@
 <p>I will be working with Prenzlauer Berg data, one neighborhood of Berlin. Located in the district of Pankow, Prenzlauer Berg is one of the most charismatic neighborhoods there, with countless of bars and cafes. For many reasons, Prenzlauer Berg is a common choice as a base for the visitors of Berlin. There are different varieties of Airbnb properties in this area, so let us driven into it!</p>
 <p>Acturally, this project is done in R three months ago, including data preparation &amp; exploration, rental price prediction, clustering analysis to place rentals. I will write three blogs to illustrate my project here. </p>
 <p>In this blog, I will perform an exploration anlysis at first. The Airbnb dataset is sourced from <a target="_blank" rel="noopener" href="http://insideairbnb.com/get-the-data.html"><strong>Inside Airbnb</strong></a> website, including detailed listings data. </p>
-<h3 id="A-quick-glance-at-the-data-shows-that-there-are"><a href="#A-quick-glance-at-the-data-shows-that-there-are" class="headerlink" title="A quick glance at the data shows that there are:"></a>A quick glance at the data shows that there are:</h3><ul>
+<p><strong>A quick glance at the data shows that there are:</strong></p>
+<ul>
 <li>3899 unique listing in Prenzlauer Berg in total. And the first rental was up in August, 2008 by a host from Florida. </li>
 <li>Rental price is ranging from 0 dollar to 5000 dollars for one night. Listing with $ 5000 price tag, a hostel with a little infomation about host and hostel, may be one outlier in dataset. </li>
 </ul>
@@ -693,7 +694,7 @@
 <li><strong>Filling in missing values automatically</strong></li>
 </ul>
 <p>Sure, I mentioned that I do not like mean imputation in <em>Drop Columns with Missing Values</em>. But the situation is on condition that mean value is meaningless. Acturally, we imputate the missing value using the idea of maximum likelihood. Some features like host_has_profile_pic, presenting whether host has profile picture or not, have most value of “t”. Most of host upload their profile picture on the sites. Therefore, we can use mode value to impute the missing value. </p>
-
+<h2 id="Inconsistent-Data-Entry"><a href="#Inconsistent-Data-Entry" class="headerlink" title="Inconsistent Data Entry"></a>Inconsistent Data Entry</h2><h2 id="Scale-and-Normalize-Data"><a href="#Scale-and-Normalize-Data" class="headerlink" title="Scale and Normalize Data"></a>Scale and Normalize Data</h2><h2 id="Parsing-Dates"><a href="#Parsing-Dates" class="headerlink" title="Parsing Dates"></a>Parsing Dates</h2>
       
     </div>
 
