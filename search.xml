@@ -145,6 +145,7 @@
     <url>/yantongtt.github.io/2020/08/06/An-overview-of-time-series-forecasting-models/</url>
     <content><![CDATA[<p><strong>This post describes 5 forecasting models and I apply them to predict the total summer spend for leisure in NYC </strong> </p>
 <p>Last semester, in my Marketing Analytics class, I have been working with Time Series Data. This data records total summer spending in NYC from 1959 to 2019. There is no trend, and no seasonality in this data. Very simple but I still wanted to review what a Time series is as well as make my understanding more concert on that. This article only provides some simple time series models. What I am trying to say is that time series predictions are difficult in reality and always require a very specialized data scientist to implement it. The models in this post are so limited that we should learn more beyond these.</p>
+<a id="more"></a>
 <h2 id="How-the-time-series-looks-like"><a href="#How-the-time-series-looks-like" class="headerlink" title="How the time series looks like?"></a>How the time series looks like?</h2><p>The data contains only 2 columns, one column is Date and the other column relates to total summer spending. </p>
 <div class="table-container">
 <table>
