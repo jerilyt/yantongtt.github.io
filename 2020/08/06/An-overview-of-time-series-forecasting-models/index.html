@@ -24,7 +24,7 @@
 
   <meta name="description" content="This post describes 5 forecasting models and I apply them to predict the total summer spend for leisure in NYC   Last semester, in my Marketing Analytics class, I have been working with Time Series Da">
 <meta property="og:type" content="article">
-<meta property="og:title" content="An overview of time series forecasting models">
+<meta property="og:title" content="An Overview of Time Series Forecasting Models">
 <meta property="og:url" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/An-overview-of-time-series-forecasting-models/index.html">
 <meta property="og:site_name" content="Yantong&#39;s Blog">
 <meta property="og:description" content="This post describes 5 forecasting models and I apply them to predict the total summer spend for leisure in NYC   Last semester, in my Marketing Analytics class, I have been working with Time Series Da">
@@ -42,7 +42,7 @@
 <meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/An-overview-of-time-series-forecasting-models/ARMA11.png">
 <meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/An-overview-of-time-series-forecasting-models/step_5.png">
 <meta property="article:published_time" content="2020-08-06T12:15:01.000Z">
-<meta property="article:modified_time" content="2020-08-06T12:34:06.281Z">
+<meta property="article:modified_time" content="2020-08-07T03:30:00.229Z">
 <meta property="article:author" content="Yantong Li">
 <meta property="article:tag" content="Time Series">
 <meta property="article:tag" content="Forecasting Models">
@@ -62,7 +62,7 @@
   };
 </script>
 
-  <title>An overview of time series forecasting models | Yantong's Blog</title>
+  <title>An Overview of Time Series Forecasting Models | Yantong's Blog</title>
   
 
 
@@ -219,7 +219,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          An overview of time series forecasting models
+          An Overview of Time Series Forecasting Models
         </h1>
 
         <div class="post-meta">
@@ -228,10 +228,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-08-06 20:15:01 / Modified: 20:34:06" itemprop="dateCreated datePublished" datetime="2020-08-06T20:15:01+08:00">2020-08-06</time>
+              <time title="Created: 2020-08-06 20:15:01" itemprop="dateCreated datePublished" datetime="2020-08-06T20:15:01+08:00">2020-08-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-07 11:30:00" itemprop="dateModified" datetime="2020-08-07T11:30:00+08:00">2020-08-07</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -430,7 +436,7 @@
 <p>We select ARMA(1,1) with the largest AIC value and BIC value</p>
 <p><img src="ARMA11.png" alt="images"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rms = sqrt(mean_squared_error(test.summerspend, y_hat_avg.ARMA))</span><br><span class="line">RMSE.append(rms)</span><br><span class="line">print(rms) <span class="comment">#RMSE = 2415096.1564545105</span></span><br></pre></td></tr></table></figure>
-<h3 id="Step-4-Select-the-Best-Model"><a href="#Step-4-Select-the-Best-Model" class="headerlink" title="Step 4: Select the Best Model"></a>Step 4: Select the Best Model</h3><div class="table-container">
+<h3 id="Step-5-Select-the-Best-Model"><a href="#Step-5-Select-the-Best-Model" class="headerlink" title="Step 5: Select the Best Model"></a>Step 5: Select the Best Model</h3><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -463,12 +469,14 @@
 </table>
 </div>
 <p>To minimize RMSE, I select Simple Average model. For more precisely prediction, I use all the dataset to build the model.</p>
-<h3 id="Step-5-Model-for-Future-Prediction"><a href="#Step-5-Model-for-Future-Prediction" class="headerlink" title="Step 5: Model for Future Prediction"></a>Step 5: Model for Future Prediction</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Build Simple Average Model with all data</span></span><br><span class="line">pred_dates = pd.date_range(<span class="string">&#x27;2020-01-01&#x27;</span>, periods=<span class="number">5</span>, freq=<span class="string">&#x27;AS&#x27;</span>)</span><br><span class="line">pred = pd.Series(data[<span class="string">&#x27;summerspend&#x27;</span>].mean(),index=pred_dates)</span><br><span class="line">pred = pd.DataFrame(pred)</span><br><span class="line">pred.columns = [<span class="string">&quot;Forecast&quot;</span>]</span><br><span class="line">pred</span><br><span class="line"></span><br><span class="line">y_hat_avg = data.copy()</span><br><span class="line">y_hat_avg[<span class="string">&#x27;avg_forecast&#x27;</span>] = data[<span class="string">&#x27;summerspend&#x27;</span>].mean()</span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line">plt.plot(train[<span class="string">&#x27;summerspend&#x27;</span>], label=<span class="string">&#x27;Train&#x27;</span>)</span><br><span class="line">plt.plot(test[<span class="string">&#x27;summerspend&#x27;</span>], label=<span class="string">&#x27;Test&#x27;</span>)</span><br><span class="line">plt.plot(y_hat_avg[<span class="string">&#x27;avg_forecast&#x27;</span>], label=<span class="string">&#x27;Average Forecast&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;best&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="Step-6-Model-for-Future-Prediction"><a href="#Step-6-Model-for-Future-Prediction" class="headerlink" title="Step 6: Model for Future Prediction"></a>Step 6: Model for Future Prediction</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Build Simple Average Model with all data</span></span><br><span class="line">pred_dates = pd.date_range(<span class="string">&#x27;2020-01-01&#x27;</span>, periods=<span class="number">5</span>, freq=<span class="string">&#x27;AS&#x27;</span>)</span><br><span class="line">pred = pd.Series(data[<span class="string">&#x27;summerspend&#x27;</span>].mean(),index=pred_dates)</span><br><span class="line">pred = pd.DataFrame(pred)</span><br><span class="line">pred.columns = [<span class="string">&quot;Forecast&quot;</span>]</span><br><span class="line">pred</span><br><span class="line"></span><br><span class="line">y_hat_avg = data.copy()</span><br><span class="line">y_hat_avg[<span class="string">&#x27;avg_forecast&#x27;</span>] = data[<span class="string">&#x27;summerspend&#x27;</span>].mean()</span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">8</span>))</span><br><span class="line">plt.plot(train[<span class="string">&#x27;summerspend&#x27;</span>], label=<span class="string">&#x27;Train&#x27;</span>)</span><br><span class="line">plt.plot(test[<span class="string">&#x27;summerspend&#x27;</span>], label=<span class="string">&#x27;Test&#x27;</span>)</span><br><span class="line">plt.plot(y_hat_avg[<span class="string">&#x27;avg_forecast&#x27;</span>], label=<span class="string">&#x27;Average Forecast&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;best&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <p><img src="step_5.png" alt="images"></p>
 <p>According to Moving Average model, we predict the total spending in summer by greater NYC visitors to New England parks for each of the next five years are 24185805.88 dollars.</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The goal of this project wasn’t to fit the best possible forecasting model for this NYC summer spending case, but to give an overview of forecasting models. In a real world, data will not as simple as this one, and may shows complex seasonality or trend. We need make more effort on preprocessing, feature engineering and feature selection.</p>
-<p> In a real world application a lot of time should be spent on preprocessing<strong>, </strong>feature engineering and feature selection.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Comparing all the models, the simple average model minimized RMSE. For more precise prediction, we used all the dataset to build a new simple average model. This model forecasts the expected value equal to the average of all previously observed points. The predictions for five years are the same value, which is 24185805.88 dollars. The constant level is due to its algorithm. Unlike the ARMA model, it won’t capture the autoregressive factor. It takes the average of all the values previously known as the next value. Of course it won’t be exact, but somewhat close. </p>
+<p>The reason why it is the best one would be its stationary property. This data is no upward or downward trend, no cycle fluctuation and no seasonality. Just like white noise, it is hard to predict the exact value. Sometimes, the simple one is the best one.</p>
+<p>The goal of this project wasn’t to fit the best possible forecasting model for this NYC summer spending case, but to give an overview of forecasting models. In a real world, data will not as simple as this one, and may shows complex seasonality or trend. We need make more effort on preprocessing, feature engineering and feature selection. In a real world application a lot of time should be spent on preprocessing<strong>, </strong>feature engineering and feature selection.</p>
 <p><strong>Thanks for reading!!! Please let me know if there is something I should add. And if you enjoy it, share it with your friends and colleagues : )</strong></p>
+<p><strong>另外博客的中文版本也会及时更新的！谢谢！</strong></p>
 
     </div>
 
@@ -491,7 +499,10 @@
     <a href="/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/" rel="prev" title="Exploring for Airbnb Listings in Germany - Price Prediction">
       <i class="fa fa-chevron-left"></i> Exploring for Airbnb Listings in Germany - Price Prediction
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/yantongtt.github.io/2020/08/07/Predict-Whether-Customers-Renew-Passes-or-Not/" rel="next" title="Do Your Customers Want to Renew Fast-Pass?">
+      Do Your Customers Want to Renew Fast-Pass? <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -550,7 +561,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#How-the-time-series-looks-like"><span class="nav-number">1.</span> <span class="nav-text">How the time series looks like?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-Series-Analysis"><span class="nav-number">2.</span> <span class="nav-text">Time Series Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-1-Visualizing-the-time-series"><span class="nav-number">2.1.</span> <span class="nav-text">Step 1: Visualizing the time series</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-2-Creating-Training-and-Test-Datasets-for-Modeling"><span class="nav-number">2.2.</span> <span class="nav-text">Step 2: Creating Training and Test Datasets for Modeling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-3-Exploring-Time-Series-to-Select-Proper-Models"><span class="nav-number">2.3.</span> <span class="nav-text">Step 3: Exploring Time Series to Select Proper Models</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-4-Modeling"><span class="nav-number">2.4.</span> <span class="nav-text">Step 4: Modeling</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-1-Naive-Approach"><span class="nav-number">2.4.1.</span> <span class="nav-text">Method 1: Naive Approach</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-2-Simple-Average"><span class="nav-number">2.4.2.</span> <span class="nav-text">Method 2: Simple Average</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-3-Moving-Average"><span class="nav-number">2.4.3.</span> <span class="nav-text">Method 3 Moving Average</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-4-Simple-Exponential-Smoothing"><span class="nav-number">2.4.4.</span> <span class="nav-text">Method 4  Simple Exponential Smoothing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-5-ARMA"><span class="nav-number">2.4.5.</span> <span class="nav-text">Method 5  ARMA</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-4-Select-the-Best-Model"><span class="nav-number">2.5.</span> <span class="nav-text">Step 4: Select the Best Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-5-Model-for-Future-Prediction"><span class="nav-number">2.6.</span> <span class="nav-text">Step 5: Model for Future Prediction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">3.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#How-the-time-series-looks-like"><span class="nav-number">1.</span> <span class="nav-text">How the time series looks like?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-Series-Analysis"><span class="nav-number">2.</span> <span class="nav-text">Time Series Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-1-Visualizing-the-time-series"><span class="nav-number">2.1.</span> <span class="nav-text">Step 1: Visualizing the time series</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-2-Creating-Training-and-Test-Datasets-for-Modeling"><span class="nav-number">2.2.</span> <span class="nav-text">Step 2: Creating Training and Test Datasets for Modeling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-3-Exploring-Time-Series-to-Select-Proper-Models"><span class="nav-number">2.3.</span> <span class="nav-text">Step 3: Exploring Time Series to Select Proper Models</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-4-Modeling"><span class="nav-number">2.4.</span> <span class="nav-text">Step 4: Modeling</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-1-Naive-Approach"><span class="nav-number">2.4.1.</span> <span class="nav-text">Method 1: Naive Approach</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-2-Simple-Average"><span class="nav-number">2.4.2.</span> <span class="nav-text">Method 2: Simple Average</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-3-Moving-Average"><span class="nav-number">2.4.3.</span> <span class="nav-text">Method 3 Moving Average</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-4-Simple-Exponential-Smoothing"><span class="nav-number">2.4.4.</span> <span class="nav-text">Method 4  Simple Exponential Smoothing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Method-5-ARMA"><span class="nav-number">2.4.5.</span> <span class="nav-text">Method 5  ARMA</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-5-Select-the-Best-Model"><span class="nav-number">2.5.</span> <span class="nav-text">Step 5: Select the Best Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-6-Model-for-Future-Prediction"><span class="nav-number">2.6.</span> <span class="nav-text">Step 6: Model for Future Prediction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">3.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -566,7 +577,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/yantongtt.github.io/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -579,7 +590,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/yantongtt.github.io/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
