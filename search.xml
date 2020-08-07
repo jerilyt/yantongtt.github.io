@@ -1341,7 +1341,7 @@
       </tags>
   </entry>
   <entry>
-    <title>Do Your Customers Want to Renew Fast-Pass?</title>
+    <title>Does Your Customer Want to Renew Fast-Pass?</title>
     <url>/yantongtt.github.io/2020/08/07/Predict-Whether-Customers-Renew-Passes-or-Not/</url>
     <content><![CDATA[<p>Instead of simple upmarket pricing system, some amusement parks adopt the price steategy to attract more customer percepetions and optimize the total revenue with “fast-pass” tickets. Remember when we went to the Universal, some of us must be willing to pay extra fee on the fast-pass for accessing to theme park in advance. That saves a lot of time! </p>
 <p>Seasonal fast-pass is another type which allows visitors renewing for next season. In fact, even though the visitors enjoyed theme park, only fewer part  of them are willing to renew the fast-pass. In this case, the analysis on building a model that classifies households as season pass renewers or non-season pass renewers may help managers better understand their target customers. That is, understanding what consumers want and need is an ongoing imperative for marketing strategy. Machine Learning can make this job much easier and efficient.</p>
