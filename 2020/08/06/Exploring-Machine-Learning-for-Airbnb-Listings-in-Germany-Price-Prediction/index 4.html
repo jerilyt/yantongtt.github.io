@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/yantongtt.github.io/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/yantongtt.github.io/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/yantongtt.github.io/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/yantongtt.github.io/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/yantongtt.github.io/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Raleway:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/yantongtt.github.io/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/yantongtt.github.io/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/yantongtt.github.io/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jerilyt.github.io","root":"/yantongtt.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="A look into the AirBnB public dataset for price prediction and understanding of the predictive variables In Data Cleaning Challenge part, I shared my understanding of data cleaning. Now, let’s dive de">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Exploring for Airbnb Listings in Germany - Price Prediction">
+<meta property="og:url" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/index.html">
+<meta property="og:site_name" content="Yantong&#39;s Blog">
+<meta property="og:description" content="A look into the AirBnB public dataset for price prediction and understanding of the predictive variables In Data Cleaning Challenge part, I shared my understanding of data cleaning. Now, let’s dive de">
+<meta property="og:locale">
+<meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/correlation.png">
+<meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/Resuduals_vs._Fitted.png">
+<meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/Normal_QQ_Plot.png">
+<meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/Scale-Location.png">
+<meta property="og:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/summary.png">
+<meta property="article:published_time" content="2020-08-06T07:34:14.000Z">
+<meta property="article:modified_time" content="2020-08-07T03:30:11.121Z">
+<meta property="article:author" content="Yantong Li">
+<meta property="article:tag" content="Airbnb Listings">
+<meta property="article:tag" content="Regression">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/correlation.png">
+
+<link rel="canonical" href="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh'
+  };
+</script>
+
+  <title>Exploring for Airbnb Listings in Germany - Price Prediction | Yantong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/yantongtt.github.io/atom.xml" title="Yantong's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/yantongtt.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yantong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/yantongtt.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/yantongtt.github.io/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/yantongtt.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/yantongtt.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
+    <link itemprop="mainEntityOfPage" href="https://jerilyt.github.io/yantongtt.github.io/2020/08/06/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany-Price-Prediction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/yantongtt.github.io/images/avatar.png">
+      <meta itemprop="name" content="Yantong Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yantong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Exploring for Airbnb Listings in Germany - Price Prediction
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-06 15:34:14" itemprop="dateCreated datePublished" datetime="2020-08-06T15:34:14+08:00">2020-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-07 11:30:11" itemprop="dateModified" datetime="2020-08-07T11:30:11+08:00">2020-08-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/yantongtt.github.io/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>A look into the AirBnB public dataset for price prediction and understanding of the predictive variables</strong></p>
+<p>In <em>Data Cleaning Challenge</em> part, I shared my understanding of data cleaning. Now, let’s dive deeper. </p>
+<p>Think about an interesting question, “if you are a host, how to maximize your profits?” This time I used a linear regression model to explore deeper into the possible factors that contribute to Airbnb rental prices. It’s okay for you to try other models like GBDT or XGBoost. In this post, I will highlight the approach I used to answer this question as well as how I explain the results of regression analysis. </p>
+<a id="more"></a>
+<p>Same as last post, data is sourced from the <a target="_blank" rel="noopener" href="http://insideairbnb.com/get-the-data.html"><strong>Inside Airbnb</strong></a> website. And data have been prepared in <em>Data Cleaning Challenge</em> part. On that part, I handled with some missing values and also create some features. </p>
+<h3 id="Step-1-Think-about-the-problem-and-dataset"><a href="#Step-1-Think-about-the-problem-and-dataset" class="headerlink" title="Step 1: Think about the problem and dataset"></a>Step 1: Think about the problem and dataset</h3><p>Before diving head first into the data and producing large correlation matrices, I always try to think of the question and get a sense of the features. Why am I doing this analysis? What’s the goal? What relationships between features and the target variable make sense? Hope this tip can help you.</p>
+<p>In my preview post, missing values have been handled, and also I removed some featrues like url or host_name. As shown in the below table, almost of data is in a very neat and ordered format. Date-typed date has been transformed as number of days or only extract the year. Some of null value has become new level of its variable, and some has been binned into cagegories. I will not go through the cleaning work in detail. Hope the preview blog would be helpful for you.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>host_since</th>
+<th>host_location</th>
+<th>host_response_time</th>
+<th>host_response_rate</th>
+<th>host_is_superhost</th>
+<th>host_neighbourhood</th>
+<th>host_listings_count</th>
+<th>host_total_listings_count</th>
+<th>host_has_profile_pic</th>
+<th>host_identity_verified</th>
+<th>street</th>
+<th>neighbourhood</th>
+<th>neighbourhood_cleansed</th>
+<th>neighbourhood_group_cleansed</th>
+<th>city</th>
+<th>state</th>
+<th>zipcode</th>
+<th>market</th>
+<th>smart_location</th>
+<th>country_code</th>
+<th>country</th>
+<th>is_location_exact</th>
+<th>property_type</th>
+<th>room_type</th>
+<th>accommodates</th>
+<th>bathrooms</th>
+<th>bedrooms</th>
+<th>beds</th>
+<th>bed_type</th>
+<th>square_feet</th>
+<th>price</th>
+<th>weekly_price</th>
+<th>monthly_price</th>
+<th>security_deposit</th>
+<th>cleaning_fee</th>
+<th>guests_included</th>
+<th>extra_people</th>
+<th>minimum_nights</th>
+<th>maximum_nights</th>
+<th>calendar_updated</th>
+<th>has_availability</th>
+<th>availability_30</th>
+<th>availability_60</th>
+<th>availability_90</th>
+<th>availability_365</th>
+<th>calendar_last_scraped</th>
+<th>number_of_reviews</th>
+<th>first_review</th>
+<th>last_review</th>
+<th>review_scores_rating</th>
+<th>review_scores_accuracy</th>
+<th>review_scores_cleanliness</th>
+<th>review_scores_checkin</th>
+<th>review_scores_communication</th>
+<th>review_scores_location</th>
+<th>review_scores_value</th>
+<th>requires_license</th>
+<th>license</th>
+<th>instant_bookable</th>
+<th>is_business_travel_ready</th>
+<th>cancellation_policy</th>
+<th>require_guest_profile_picture</th>
+<th>require_guest_phone_verification</th>
+<th>calculated_host_listings_count</th>
+<th>reviews_per_month</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>2008</td>
+<td>Coledale, New South Wales, Australia</td>
+<td>within a day</td>
+<td>high</td>
+<td>f</td>
+<td>Prenzlauer Berg</td>
+<td>1</td>
+<td>1</td>
+<td>t</td>
+<td>t</td>
+<td>Berlin, Germany</td>
+<td>Prenzlauer Berg</td>
+<td>Prenzlauer Berg S√ºdwest</td>
+<td>Pankow</td>
+<td>Berlin</td>
+<td>Berlin</td>
+<td>10405</td>
+<td>Berlin</td>
+<td>Berlin, Germany</td>
+<td>DE</td>
+<td>Germany</td>
+<td>t</td>
+<td>Apartment</td>
+<td>Entire home/apt</td>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Real Bed</td>
+<td>720</td>
+<td>90</td>
+<td>offer discount</td>
+<td>offer discount</td>
+<td>200</td>
+<td>50</td>
+<td>2</td>
+<td>20</td>
+<td>62</td>
+<td>1125</td>
+<td>7</td>
+<td>t</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>220</td>
+<td>2018/11/7</td>
+<td>143</td>
+<td>2009</td>
+<td>2017</td>
+<td>92</td>
+<td>9</td>
+<td>9</td>
+<td>9</td>
+<td>9</td>
+<td>10</td>
+<td>9</td>
+<td>t</td>
+<td>No</td>
+<td>t</td>
+<td>f</td>
+<td>strict_14_with_grace_period</td>
+<td>f</td>
+<td>f</td>
+<td>1</td>
+<td>1.25</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2009</td>
+<td>Berlin, Berlin, Germany</td>
+<td>within an hour</td>
+<td>high</td>
+<td>t</td>
+<td>Prenzlauer Berg</td>
+<td>1</td>
+<td>1</td>
+<td>t</td>
+<td>t</td>
+<td>Berlin, Germany</td>
+<td>Prenzlauer Berg</td>
+<td>Helmholtzplatz</td>
+<td>Pankow</td>
+<td>Berlin</td>
+<td>Berlin</td>
+<td>10437</td>
+<td>Berlin</td>
+<td>Berlin, Germany</td>
+<td>DE</td>
+<td>Germany</td>
+<td>t</td>
+<td>Apartment</td>
+<td>Private room</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Real Bed</td>
+<td>N/A</td>
+<td>42</td>
+<td>no discount</td>
+<td>no discount</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>24</td>
+<td>2</td>
+<td>10</td>
+<td>3</td>
+<td>t</td>
+<td>15</td>
+<td>26</td>
+<td>26</td>
+<td>26</td>
+<td>2018/11/7</td>
+<td>197</td>
+<td>2009</td>
+<td>2018</td>
+<td>96</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>9</td>
+<td>t</td>
+<td>No</td>
+<td>f</td>
+<td>f</td>
+<td>moderate</td>
+<td>f</td>
+<td>f</td>
+<td>1</td>
+<td>1.75</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2009</td>
+<td>Berlin, Berlin, Germany</td>
+<td>within a few hours</td>
+<td>high</td>
+<td>f</td>
+<td>Prenzlauer Berg</td>
+<td>1</td>
+<td>1</td>
+<td>t</td>
+<td>t</td>
+<td>Berlin, Germany</td>
+<td>Prenzlauer Berg</td>
+<td>Prenzlauer Berg S√ºdwest</td>
+<td>Pankow</td>
+<td>Berlin</td>
+<td>Berlin</td>
+<td>10405</td>
+<td>Berlin</td>
+<td>Berlin, Germany</td>
+<td>DE</td>
+<td>Germany</td>
+<td>f</td>
+<td>Apartment</td>
+<td>Entire home/apt</td>
+<td>7</td>
+<td>2.5</td>
+<td>4</td>
+<td>7</td>
+<td>Real Bed</td>
+<td>N/A</td>
+<td>180</td>
+<td>offer discount</td>
+<td>no discount</td>
+<td>400</td>
+<td>80</td>
+<td>5</td>
+<td>10</td>
+<td>6</td>
+<td>14</td>
+<td>14</td>
+<td>t</td>
+<td>0</td>
+<td>7</td>
+<td>7</td>
+<td>137</td>
+<td>2018/11/7</td>
+<td>6</td>
+<td>2015</td>
+<td>2018</td>
+<td>100</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>t</td>
+<td>Yes</td>
+<td>f</td>
+<td>f</td>
+<td>strict_14_with_grace_period</td>
+<td>f</td>
+<td>f</td>
+<td>1</td>
+<td>0.15</td>
+</tr>
+<tr>
+<td>7</td>
+<td>2009</td>
+<td>Berlin, Berlin, Germany</td>
+<td>within a day</td>
+<td>high</td>
+<td>f</td>
+<td>Prenzlauer Berg</td>
+<td>3</td>
+<td>3</td>
+<td>t</td>
+<td>f</td>
+<td>Berlin, Germany</td>
+<td>Prenzlauer Berg</td>
+<td>Prenzlauer Berg Nordwest</td>
+<td>Pankow</td>
+<td>Berlin</td>
+<td>Berlin</td>
+<td>10437</td>
+<td>Berlin</td>
+<td>Berlin, Germany</td>
+<td>DE</td>
+<td>Germany</td>
+<td>t</td>
+<td>Apartment</td>
+<td>Entire home/apt</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>Real Bed</td>
+<td>N/A</td>
+<td>70</td>
+<td>offer discount</td>
+<td>offer discount</td>
+<td>500</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>90</td>
+<td>1125</td>
+<td>1</td>
+<td>t</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>129</td>
+<td>2018/11/7</td>
+<td>23</td>
+<td>2010</td>
+<td>2018</td>
+<td>93</td>
+<td>10</td>
+<td>10</td>
+<td>9</td>
+<td>10</td>
+<td>9</td>
+<td>9</td>
+<td>t</td>
+<td>No</td>
+<td>f</td>
+<td>f</td>
+<td>strict_14_with_grace_period</td>
+<td>f</td>
+<td>f</td>
+<td>3</td>
+<td>0.23</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2010</td>
+<td>Berlin, Berlin, Germany</td>
+<td>within an hour</td>
+<td>high</td>
+<td>t</td>
+<td>Prenzlauer Berg</td>
+<td>1</td>
+<td>1</td>
+<td>t</td>
+<td>t</td>
+<td>Berlin, Germany</td>
+<td>Prenzlauer Berg</td>
+<td>Prenzlauer Berg S√ºdwest</td>
+<td>Pankow</td>
+<td>Berlin</td>
+<td>Berlin</td>
+<td>10405</td>
+<td>Berlin</td>
+<td>Berlin, Germany</td>
+<td>DE</td>
+<td>Germany</td>
+<td>t</td>
+<td>Other</td>
+<td>Private room</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Real Bed</td>
+<td>N/A</td>
+<td>45</td>
+<td>offer discount</td>
+<td>offer discount</td>
+<td>0</td>
+<td>18</td>
+<td>1</td>
+<td>26</td>
+<td>3</td>
+<td>30</td>
+<td>7</td>
+<td>t</td>
+<td>8</td>
+<td>18</td>
+<td>42</td>
+<td>42</td>
+<td>2018/11/7</td>
+<td>279</td>
+<td>2010</td>
+<td>2018</td>
+<td>96</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>t</td>
+<td>No</td>
+<td>f</td>
+<td>f</td>
+<td>strict_14_with_grace_period</td>
+<td>f</td>
+<td>f</td>
+<td>1</td>
+<td>2.83</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Step-2-Feature-Selection"><a href="#Step-2-Feature-Selection" class="headerlink" title="Step 2: Feature Selection"></a>Step 2: Feature Selection</h3><p>As mentioned in last blog, features has been engineered, including transform the format and create more effecient and useful features. Now is the step of feature selection. Not all the variables will be used in the linear regression model. There are three reasons. One is that some data is unique for each datapoint like id, host_id. These features are very easy  to identify, and I have been removed in data cleaning. The second thing is another extreme situation, where all the value for every datapoint is same or constant. These features are named as “Zero Variance Feature”, which are useless and redundant. I will detect them by primary value analysis. When one feature’s primary value ratio is over a critical level, the feature has less predictable ability. The third one is that there are strong correlations between variables. I use correlation coefficient and VIF to detect</p>
+<h4 id="1-Primary-Value-Ratio"><a href="#1-Primary-Value-Ratio" class="headerlink" title="1. Primary Value Ratio"></a>1. Primary Value Ratio</h4><p>Delect the feature whose primary value ratio over 80%</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RowNumber = nrow(PB_lm)</span><br><span class="line">cols = colnames(PB_lm)</span><br><span class="line">Primary_Value_Ratio = c()</span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> cols)&#123;</span><br><span class="line">        Primary_Value_Ratio = c(Primary_Value_Ratio,max(table(PB_lm[i]))/RowNumber) <span class="comment"># calculate the ratio</span></span><br><span class="line">&#125;</span><br><span class="line">Primary_Value = data.frame(cols,Primary_Value_Ratio)</span><br><span class="line">Primary_Value[Primary_Value$Primary_Value_Ratio&gt;<span class="number">0.8</span>,]</span><br><span class="line"></span><br><span class="line">PB_lm = select(PB_lm,-Primary_Value[Primary_Value$Primary_Value_Ratio&gt;<span class="number">0.8</span>,]$cols)</span><br></pre></td></tr></table></figure>
+<h4 id="2-Correlation-Analysis"><a href="#2-Correlation-Analysis" class="headerlink" title="2. Correlation Analysis"></a>2. Correlation Analysis</h4><p>Correlation analysis is a statistical method used to evaluate the strength of relationship between two quantitative variables. A high correlation means that two or more variables have a strong relationship with each other, while a weak correlation means that the variables are hardly related. In linear regression model, one model assumption is that variables should be independent of one another. Otherwises, one variable will be explained by other. </p>
+<p><img src="correlation.png" alt="images"></p>
+<h4 id="3-Skewness-of-Dependent-Variable"><a href="#3-Skewness-of-Dependent-Variable" class="headerlink" title="3. Skewness of Dependent Variable"></a>3. Skewness of Dependent Variable</h4><p>Before we detect multicollinearity problem, I transformed price into normal distribution. Price follows right-skewed Distribution. It is a common phenomenon for most real-life variables. However, for linear regression model, it is essential for residual of the model to follow normal distribution. And then the response variable will also follow. Here I used log transformation to make response variable into normal distribution. The new repsonce variable should be log(price). For log transforming, the data point which price is 0 should be deleted. </p>
+<h3 id="Step-3-Run-OLS-and-check-for-linear-regression-assumptions"><a href="#Step-3-Run-OLS-and-check-for-linear-regression-assumptions" class="headerlink" title="Step 3: Run OLS and check for linear regression assumptions"></a>Step 3: Run OLS and check for linear regression assumptions</h3><p>The OLS model is the most common estimation method for linear models, and will provide us with the simplest linear regression model to base our future models off of. It’s always good to start simple then add complexity. In addition, regression model is a powerful analysis that can analyze multiple variables simultaneously to answer complex research questions. However, if you don’t satisfy the OLS assumptions, you might not be able to trust the results. OLS model is a great place to check for linear regression assumptions.</p>
+<h4 id="1-Get-Variance-Inflation-Factors-VIFs-to-Detect-Multicollinearity"><a href="#1-Get-Variance-Inflation-Factors-VIFs-to-Detect-Multicollinearity" class="headerlink" title="1. Get Variance Inflation Factors (VIFs) to Detect Multicollinearity"></a>1. Get Variance Inflation Factors (VIFs) to Detect Multicollinearity</h4><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Build the initial model</span></span><br><span class="line">lm_1 &lt;- lm(log_price ~., data = train_data3) <span class="comment"># data should been splitted into training dataset and test dataset.</span></span><br><span class="line"></span><br><span class="line">lendfitback &lt;- step(lm_1,direction = <span class="string">&quot;backward&quot;</span>) </span><br><span class="line">summary(lendfitback)</span><br><span class="line">vif(lendfitback,digits = <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>VIFs are not produced by the OLS table so you should manually extract them. They are a great way to check for multicollinearity in your model. Multicollinearity is when there is high correlation between your features. It is an assumption of linear regression that your data does not have multicollinearity, so make sure to check this. You want your VIFs under 7.</p>
+<p>Here, VIFs values of neighbourhood_cleansed, zipcode, first_review are large, which indicates that there is significant Multicollinearity problem with 3 features. Therefore, we delete them and rebuild a new model. </p>
+<h4 id="2-Check-Residuals-of-Model"><a href="#2-Check-Residuals-of-Model" class="headerlink" title="2. Check Residuals of Model"></a>2. Check Residuals of Model</h4><p>Also, another important asssumption is about residuals.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Build the second model without 3 multicollinearity features</span></span><br><span class="line">lm_2 &lt;- lm(log_price ~. - neighbourhood_cleansed - zipcode-first_review, data = train_data3)</span><br><span class="line">lendfitback_2 &lt;- step(lm_2,direction = <span class="string">&quot;backward&quot;</span>)</span><br><span class="line">plot(lendfitback_2)</span><br></pre></td></tr></table></figure>
+<h5 id="Resuduals-vs-Fitted"><a href="#Resuduals-vs-Fitted" class="headerlink" title="Resuduals vs. Fitted"></a>Resuduals vs. Fitted</h5><p>Even though residuals of some outliers over the range of [-2,2], most of data points randomly distributes around 0. This model fits the data well</p>
+<p><img src="Resuduals_vs._Fitted.png" alt="images"></p>
+<h5 id="Normal-Q-Q-Plot"><a href="#Normal-Q-Q-Plot" class="headerlink" title="Normal Q_Q Plot"></a>Normal Q_Q Plot</h5><p>Some data points deviate from the diagonal, so residuals do not follow normal distribution strictly. </p>
+<p><img src="Normal_QQ_Plot.png" alt="images"></p>
+<h5 id="Scale-Location"><a href="#Scale-Location" class="headerlink" title="Scale-Location"></a>Scale-Location</h5><p>Seem to be constant with no trend. There is no serious problem in Heteroskedasticity.</p>
+<p><img src="Scale-Location.png" alt="images"></p>
+<h5 id="Residual-Independence"><a href="#Residual-Independence" class="headerlink" title="Residual Independence"></a>Residual Independence</h5><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">durbinWatsonTest(lendfitback_2)</span><br></pre></td></tr></table></figure>
+<p>In Durbin Watson Test, the p-value is larger than 0.05, we can assume errors are independent. In conclusion, the residuals can be regarded as stochastic error.</p>
+<h3 id="Step-4-Prediction-in-valid-dataset-and-Summary"><a href="#Step-4-Prediction-in-valid-dataset-and-Summary" class="headerlink" title="Step 4: Prediction in valid dataset and Summary"></a>Step 4: Prediction in valid dataset and Summary</h3><p>After we check the residuals, we know the model is satisfied OLS assumptions. And we use the model to predict on validation dataset.</p>
+<p><img src="summary.png" alt="images"></p>
+<p>The adjusted r-squared is only 0.5277. This means only 52.77% variation has been explained by the multiple regression model. In general, the higher the R-squared, the better the model fits your data. Even though the R-squared is not closing to 1, we also can infer the sample data are well correspond to the fitted (assumed) model. In fact, R-squared doesn’t tell us the entire story. After we check the residual plots, we know the residuals independent and identically distributed in normal distribution. That is, this model fits the data well.</p>
+<p>In valid dataset, RMSE is 0.4206808. The standard deviation of the predictions from the actual values in valid dataset would be 0.4206808. What’s more, RMSE in training dataset is 0.3775776. The difference between these two number is small. This tells us the model is good-fit and has generalization ability. The model has the ability to adapt properly to new, previously unseen data, drawn from the same distribution as the one used to create the model.</p>
+<p><strong>Thanks for reading!</strong></p>
+<p><strong>Please let me know if there is something I should add. And if you enjoy it, share it with your friends and colleagues : )</strong></p>
+<p><strong>另外博客的中文版本也会及时更新的！谢谢！</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/yantongtt.github.io/tags/Airbnb-Listings/" rel="tag"># Airbnb Listings</a>
+              <a href="/yantongtt.github.io/tags/Regression/" rel="tag"># Regression</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/yantongtt.github.io/2020/08/04/Exploring-Machine-Learning-for-Airbnb-Listings-in-Germany/" rel="prev" title="Exploring for Airbnb Dataset in Germany - Data Cleaning Challenge">
+      <i class="fa fa-chevron-left"></i> Exploring for Airbnb Dataset in Germany - Data Cleaning Challenge
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/yantongtt.github.io/2020/08/06/An-overview-of-time-series-forecasting-models/" rel="next" title="An Overview of Time Series Forecasting Models">
+      An Overview of Time Series Forecasting Models <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-1-Think-about-the-problem-and-dataset"><span class="nav-number">1.</span> <span class="nav-text">Step 1: Think about the problem and dataset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-2-Feature-Selection"><span class="nav-number">2.</span> <span class="nav-text">Step 2: Feature Selection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Primary-Value-Ratio"><span class="nav-number">2.1.</span> <span class="nav-text">1. Primary Value Ratio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Correlation-Analysis"><span class="nav-number">2.2.</span> <span class="nav-text">2. Correlation Analysis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Skewness-of-Dependent-Variable"><span class="nav-number">2.3.</span> <span class="nav-text">3. Skewness of Dependent Variable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-3-Run-OLS-and-check-for-linear-regression-assumptions"><span class="nav-number">3.</span> <span class="nav-text">Step 3: Run OLS and check for linear regression assumptions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Get-Variance-Inflation-Factors-VIFs-to-Detect-Multicollinearity"><span class="nav-number">3.1.</span> <span class="nav-text">1. Get Variance Inflation Factors (VIFs) to Detect Multicollinearity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Check-Residuals-of-Model"><span class="nav-number">3.2.</span> <span class="nav-text">2. Check Residuals of Model</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Resuduals-vs-Fitted"><span class="nav-number">3.2.1.</span> <span class="nav-text">Resuduals vs. Fitted</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Normal-Q-Q-Plot"><span class="nav-number">3.2.2.</span> <span class="nav-text">Normal Q_Q Plot</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Scale-Location"><span class="nav-number">3.2.3.</span> <span class="nav-text">Scale-Location</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Residual-Independence"><span class="nav-number">3.2.4.</span> <span class="nav-text">Residual Independence</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step-4-Prediction-in-valid-dataset-and-Summary"><span class="nav-number">4.</span> <span class="nav-text">Step 4: Prediction in valid dataset and Summary</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Yantong Li"
+      src="/yantongtt.github.io/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Yantong Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/yantongtt.github.io/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/yantongtt.github.io/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/yantongtt.github.io/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jerilyt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jerilyt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jerezlyt@gmail.com" title="E-Mail → mailto:jerezlyt@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/SherryAsako" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;SherryAsako" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/cheerytt_" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;cheerytt_" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yantong Li</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/yantongtt.github.io/lib/anime.min.js"></script>
+  <script src="/yantongtt.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/yantongtt.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/yantongtt.github.io/js/utils.js"></script>
+
+<script src="/yantongtt.github.io/js/motion.js"></script>
+
+
+<script src="/yantongtt.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/yantongtt.github.io/js/next-boot.js"></script>
+
+
+  <script defer src="/yantongtt.github.io/lib/three/three.min.js"></script>
+    <script defer src="/yantongtt.github.io/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/yantongtt.github.io/js/local-search.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
