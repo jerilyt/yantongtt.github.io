@@ -1997,4 +1997,36 @@
         <tag>Marketing Strategy</tag>
       </tags>
   </entry>
+  <entry>
+    <title>违约风险的压力测试模型</title>
+    <url>/yantongtt.github.io/2020/08/10/%E8%BF%9D%E7%BA%A6%E9%A3%8E%E9%99%A9%E7%9A%84%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>之前在风险管理部门做数据分析的实习时，其实并不太理解数据风控相关业务知识。所以在面对关于风控里面压力测试项目的模型时，虽然能够理解算法如何构建，懂得做分析，但是要是问到这么做的原因时是不明白的。但只有理解业务，才能建立完整的一套体系。所以花了一定时间理解数据风控相关的知识。这篇博文基于零售产品，谈谈我对信用风险的压力测试的理解。如有不妥，欢迎大家指正！感谢！</p>
+<a id="more"></a>
+<h2 id="信用风险是如何计算的？"><a href="#信用风险是如何计算的？" class="headerlink" title="信用风险是如何计算的？"></a>信用风险是如何计算的？</h2><p>在谈信用风险压测模型前，首先整理一下影响信用风险的几个因素。</p>
+<p>信用风险最为简单的理解就是，银行把钱借给某位贷款人，但他不还钱的风险。只知道这个违约事件其实是很难做出决策的，因为我们无法量化风险程度。衡量损失的严重程度，我们首先想知道这个贷款人借了多少钱，一但违约我们损失多少，损失可能性有多大，还有多久还清借款。</p>
+<h3 id="四个风险度量"><a href="#四个风险度量" class="headerlink" title="四个风险度量"></a>四个风险度量</h3><p>巴塞尔新资本协议对内部评级法(Internal Ratings Based Approaches，IRB)就有相应风险度量。依靠四方面的数据：一是违约风险暴露(Exposure at Default, EAD)，二是违约损失率(Loss Given Default, LGD)，三是违约概率(Probability of Default, PD)，四是有效期限(Maturity, M)。</p>
+<h4 id="1-违约风险暴露-Exposure-at-Default-EAD"><a href="#1-违约风险暴露-Exposure-at-Default-EAD" class="headerlink" title="1. 违约风险暴露 (Exposure at Default, EAD)"></a>1. 违约风险暴露 (Exposure at Default, EAD)</h4><p>最简单的理解就是本金加利息。借给别人的钱越多，那么承担的风险就越高。</p>
+<h4 id="2-违约损失率-Loss-Given-Default-LGD"><a href="#2-违约损失率-Loss-Given-Default-LGD" class="headerlink" title="2. 违约损失率(Loss Given Default, LGD)"></a>2. 违约损失率(Loss Given Default, LGD)</h4><p>借钱方违约了，你会承担的风险。大部分时候银行并不会承担100%的风险，因为对方可能有资产抵押在你这里。不过这也取决于产品。现在也有很多面向稳定收入或是学生这样低收入人群的无抵押产品。LGD越高，承担的风险也就越高。</p>
+<h4 id="3-违约概率-Probability-of-Default-PD"><a href="#3-违约概率-Probability-of-Default-PD" class="headerlink" title="3. 违约概率(Probability of Default, PD)"></a>3. 违约概率(Probability of Default, PD)</h4><p>借款人在未来一定时期内发生违约的可能性。违约概率越高，承担的风险越大。这个时期并不是到借款到期为止，这里涉及到表现期的概念，是对观察点上账户/客户表现进行监控的时间周期。这个表现期需要尽可能保证样本中坏样本都表现出来（让坏人彻底坏，好人真的好）。但不能过长，过长可能导致信用表现与申请信息之间的联系比较弱。在较长的时间里申请者的贷款资信状况与申请时的资信状况之间的变化可能比较大，而且银行的信贷环境、目标客户、申请群体的变迁也可能比较大，导致历史数据关系的适用性降低。表现期需要有足够的长度，在完整性和数据质量之间保持平衡。这个可以通过Vintage Analytics分析得来。</p>
+<h4 id="4-有效期限-Residual-Maturity-R-M"><a href="#4-有效期限-Residual-Maturity-R-M" class="headerlink" title="4. 有效期限(Residual Maturity,R M)"></a>4. 有效期限(Residual Maturity,R M)</h4><p>借款离到期还有多久。</p>
+<h3 id="量化信用风险"><a href="#量化信用风险" class="headerlink" title="量化信用风险"></a>量化信用风险</h3><p>信用风险是用期望损失(Expected Loss)衡量的。</p>
+<ol>
+<li>$EL = EAD \times LGD \times [1-(1-PD)^{RM}]$</li>
+<li>If PD &lt;= 3%, and RM &gt;= 5 years,$EL\approx EAD \times LGD \times PD \times RM$</li>
+<li>如果RM很长，是无法用EL来衡量的，因为PD、LGD、EAD很难测量，数据很有可能发生变动。这时用一年的EL来测量风险，作为该项借款在未来一年内的期望损失。<script type="math/tex">EL_{1\ year} = EAD \times LGD \times min(PD, [1-(1-PD)^{RM}])</script></li>
+</ol>
+<h2 id="信用风险的压力测试模型"><a href="#信用风险的压力测试模型" class="headerlink" title="信用风险的压力测试模型"></a>信用风险的压力测试模型</h2><p>将风险度量（如PD、LGD、EAD）与宏观经济变量（如GDP、失业率、利率）联系在一起，并将模型应用于银行本身给定的一系列场景中，得到在各个场景下的估计值。</p>
+<p>理解压力测试并不难，与信用风险计量模型类似。但是信用风险压测模型与信用风险计量模型有联系又有区别。信用风险计量模型是用来计算正常风险下资产组合的风险参数，而信用风险的压测模型主要功能是计算压力情境下资产组合的风险表现，从而计算预计损失所需的准备金。</p>
+<p>有个有挑战的问题是，如何在给定一个压力测试场景下，给出违约概率估计是比较困难的事情。一个常用的模型就会死通过因子分析，如PCA，从多维度的宏观经济变量的历史数据组层时间序列矩阵，提炼得到一个主要因子F。（这个因子是由宏观因子线性组合而成）。有了F和历史数据，建立PD模型。最常用的PD建模方法就是LR。</p>
+<p>$ln\frac{PD}{1-PD} = \beta_0+\beta_1F$, 所以有 $PD(F)=\frac{1}{1+e^{\beta_0}-\beta_1F}$</p>
+<p>再计算条件违约概率 PD|F</p>
+]]></content>
+      <categories>
+        <category>Risk Management</category>
+      </categories>
+      <tags>
+        <tag>风险管理 Risk Management</tag>
+        <tag>压力测试 Stress Testing</tag>
+      </tags>
+  </entry>
 </search>
